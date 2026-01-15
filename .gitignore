@@ -1,0 +1,23 @@
+nod# Node.js
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+
+# Build output
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Logs
+*.log

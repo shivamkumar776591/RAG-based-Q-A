@@ -45,6 +45,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 app.use(express.json());
 
+// run every 30 minutes
+// cron.schedule("*/30 * * * *", async () => {
+//   const expiredSessions = await getExpiredSessions();
+
+//   for (const sessionId of expiredSessions) {
+//     await pineconeIndex.deleteAll({ namespace: sessionId });
+//   }
+// });
+
+
 
 // app.post("/upload",upload.single("file"),async (req,res)=>{
 // try{
@@ -97,6 +107,8 @@ app.use(express.json());
 app.post("/upload",upload.single("file"),async(req,res)=>{
   
   const filePath = req.file.path;
+  const {sessionId} = req.body;
+  console.log(sessionId);
   const text = await extractTextFromPDF(filePath);
   console.log(text.length)
 
@@ -121,8 +133,10 @@ app.post("/upload",upload.single("file"),async(req,res)=>{
  await PineconeStore.fromDocuments(chunkData, embeddings, {
     pineconeIndex,
     maxConcurrency: 5,
+    // namespace:sessionId
   });
 
+console.log("Pinecone namespace:", sessionId);
 
 
   console.log("Data stored");
@@ -153,6 +167,6 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+app.listen(5000, () => {
   console.log("🚀 Server running on http://localhost:3000");
 });
